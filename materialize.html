@@ -33,62 +33,62 @@
     const insertHTML = ( view ) => ( html ) => view.innerHTML = html
     const responseToJSON = ( response ) => response.json()
 
-    const toOption = ( map ) => ( acc, el ) => 
-        acc += `<option value="${ el[ map.value ] }">${ el[ map.name ] }</option>`
+
+    const defaultStyle = ( el ) => {
+          
+      const input    = () =>   `<input type="${ el.type }" placeholder="${ el.name }">`
+      const textarea = () =>   `<textarea rows="3"></textarea>`
+      const select   = () =>   `<select>${ comboPopulate( el.source, { value: "id", name: "name" } ) }</select>`
+      const number   = () =>   `<input type="${ el.type }" placeholder="${ el.name }" min="${ el.min ? el.min : 0 }" max="${ el.max ? el.max : 0 }">`
+
+      const types = {
+          text: input,
+          password: input,
+          email: input,
+          textarea: textarea,
+          select: select,
+          number: number
+      }
+
+      return (types[el.type] || types["text"])()
+    }
+
+    const materializeStyle = ( el, i ) => {
+          
+      const inputWrapperClass = `input-field col s12`
+      const inputElementClass = `validate`
+      const idElementValue = `${ el.name }-${ i + 1 }`
+
+      const input = () => `
+      <div class="row">
+        <div class="${ inputWrapperClass }">
+          <input id="${ idElementValue }" type="${ el.type }" class="${ inputElementClass }">
+          <label for="${ idElementValue }">
+            ${ el.name[ 0 ].toUpperCase() + el.name.slice( 1 ) }
+          </label>
+        </div>
+      </div>`
+
+        const types = {
+            text: input,
+            password: input,
+            email: input,
+            // textarea: textarea,
+            // select: select,
+            // number: number
+        }
+
+        return ( types[ el.type ] || types[ "text" ])()
+      }
 
     const createForm = ( data ) => {
       
+      const toOption = ( acc, el ) => 
+        acc += `<option value="${ el[ map.value ] }">${ el[ map.name ] }</option>`
 
       const comboPopulate = ( data, map ) => 
-        data.reduce( toOption( map ), '' )
+        data.reduce( toOption, '' )
 
-      const materializeStyle = ( el, i ) => {
-          
-        const inputWrapperClass = `input-field col s12`
-        const inputElementClass = `validate`
-        const idElementValue = `${ el.name }-${ i + 1 }`
-
-        const input = () => `
-        <div class="row">
-          <div class="${ inputWrapperClass }">
-            <input id="${ idElementValue }" type="${ el.type }" class="${ inputElementClass }">
-            <label for="${ idElementValue }">
-              ${ el.name[ 0 ].toUpperCase() + el.name.slice( 1 ) }
-            </label>
-          </div>
-        </div>`
-
-          const types = {
-              text: input,
-              password: input,
-              email: input,
-              // textarea: textarea,
-              // select: select,
-              // number: number
-          }
-
-          return ( types[ el.type ] || types[ "text" ])()
-      }
-
-
-      const defaultStyle = ( el ) => {
-          
-          const input    = () =>   `<input type="${ el.type }" placeholder="${ el.name }">`
-          const textarea = () =>   `<textarea rows="3"></textarea>`
-          const select   = () =>   `<select>${ comboPopulate( el.source, { value: "id", name: "name" } ) }</select>`
-          const number   = () =>   `<input type="${ el.type }" placeholder="${ el.name }" min="${ el.min ? el.min : 0 }" max="${ el.max ? el.max : 0 }">`
-
-          const types = {
-              text: input,
-              password: input,
-              email: input,
-              textarea: textarea,
-              select: select,
-              number: number
-          }
-
-          return (types[el.type] || types["text"])()
-      }
 
       const wrapper = ( el, i, wrapper ) => ({
           
@@ -105,7 +105,7 @@
 
       const makeForm = ( data = {}, template = 'default' ) => getTemplate( data, template )
 
-      const form = makeForm( data, "materialize" )
+      const form = makeForm( data )
 
       insertHTML( view )( form )
 
