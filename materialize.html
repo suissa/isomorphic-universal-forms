@@ -36,10 +36,10 @@
 
     const defaultStyle = ( el ) => {
           
-      const input    = () =>   `<input type="${ el.type }" placeholder="${ el.name }">`
-      const textarea = () =>   `<textarea rows="3"></textarea>`
-      const select   = () =>   `<select>${ comboPopulate( el.source, { value: "id", name: "name" } ) }</select>`
-      const number   = () =>   `<input type="${ el.type }" placeholder="${ el.name }" min="${ el.min ? el.min : 0 }" max="${ el.max ? el.max : 0 }">`
+      const input = () => `<input type="${ el.type }" placeholder="${ el.name }">`
+      const textarea = () => `<textarea rows="3"></textarea>`
+      const select = () => `<select>${ comboPopulate( el.source, { value: "id", name: "name" } ) }</select>`
+      const number = () => `<input type="${ el.type }" placeholder="${ el.name }" min="${ el.min ? el.min : 0 }" max="${ el.max ? el.max : 0 }">`
 
       const types = {
           text: input,
