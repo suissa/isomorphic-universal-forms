@@ -34,84 +34,86 @@
 
     const responseToJSON = ( response ) => response.json()
 
+    const createForm = ( data ) => {
+      
+      const toOption = ( acc, el ) => 
+        acc += `<option value="${ el[ map.value ] }">${ el[ map.name ] }</option>`
+
+      const comboPopulate = ( data, map ) => 
+        data.reduce( toOption, '' )
+
+      const materializeStyle = ( el, i ) => {
+          
+        const inputWrapperClass = `input-field col s12`
+        const inputElementClass = `validate`
+        const idElementValue = `${ el.name }-${ i + 1 }`
+
+        const input = () => `
+        <div class="row">
+          <div class="${ inputWrapperClass }">
+            <input id="${ idElementValue }" type="${ el.type }" class="${ inputElementClass }">
+            <label for="${ idElementValue }">
+              ${ el.name[ 0 ].toUpperCase() + el.name.slice( 1 ) }
+            </label>
+          </div>
+        </div>`
+
+          const types = {
+              text: input,
+              password: input,
+              email: input,
+              // textarea: textarea,
+              // select: select,
+              // number: number
+          }
+
+          return ( types[ el.type ] || types[ "text" ])()
+      }
+
+
+      const defaultStyle = ( el ) => {
+          
+          const input    = () =>   `<input type="${ el.type }" placeholder="${ el.name }">`
+          const textarea = () =>   `<textarea rows="3"></textarea>`
+          const select   = () =>   `<select>${ comboPopulate( el.source, { value: "id", name: "name" } ) }</select>`
+          const number   = () =>   `<input type="${ el.type }" placeholder="${ el.name }" min="${ el.min ? el.min : 0 }" max="${ el.max ? el.max : 0 }">`
+
+          const types = {
+              text: input,
+              password: input,
+              email: input,
+              textarea: textarea,
+              select: select,
+              number: number
+          }
+
+          return (types[el.type] || types["text"])()
+      }
+
+      const wrapper = ( el, i, wrapper ) => ({
+          
+          default: defaultStyle( el, i ),
+          materialize: materializeStyle( el, i )
+
+      }[ wrapper ])
+          
+      const makeElemets = ( data, style ) => 
+        data.reduce(( acc, el, i ) => acc += `${ wrapper( el, i, style ) }\n`,"")
+          
+      const getTemplate = ( data, type ) => 
+        `<div class="row"><form class="col s12">\n${ makeElemets( data, type ) }</form></div>`
+
+      const makeForm = ( data = {}, template = 'default' ) => getTemplate( data, template )
+
+      const form = makeForm( data, "materialize" )
+
+      view.innerHTML = form
+
+    }
+    
     fetch('http://localhost:8000/api/users/schema',myInit)
       .then( responseToJSON )
-      .then( ( data ) => {
-      
-        const toOption = ( acc, el ) => 
-          acc += `<option value="${ el[ map.value ] }">${ el[ map.name ] }</option>`
-
-        const comboPopulate = ( data, map ) => 
-          data.reduce( toOption, '' )
-
-        const materializeStyle = ( el, i ) => {
-            
-          const inputWrapperClass = `input-field col s12`
-          const inputElementClass = `validate`
-          const idElementValue = `${ el.name }-${ i + 1 }`
-
-          const input = () => `
-          <div class="row">
-            <div class="${ inputWrapperClass }">
-              <input id="${ idElementValue }" type="${ el.type }" class="${ inputElementClass }">
-              <label for="${ idElementValue }">
-                ${ el.name[ 0 ].toUpperCase() + el.name.slice( 1 ) }
-              </label>
-            </div>
-          </div>`
-
-            const types = {
-                text: input,
-                password: input,
-                email: input,
-                // textarea: textarea,
-                // select: select,
-                // number: number
-            }
-
-            return ( types[ el.type ] || types[ "text" ])()
-        }
-
-
-        const defaultStyle = ( el ) => {
-            
-            const input    = () =>   `<input type="${ el.type }" placeholder="${ el.name }">`
-            const textarea = () =>   `<textarea rows="3"></textarea>`
-            const select   = () =>   `<select>${ comboPopulate( el.source, { value: "id", name: "name" } ) }</select>`
-            const number   = () =>   `<input type="${ el.type }" placeholder="${ el.name }" min="${ el.min ? el.min : 0 }" max="${ el.max ? el.max : 0 }">`
-
-            const types = {
-                text: input,
-                password: input,
-                email: input,
-                textarea: textarea,
-                select: select,
-                number: number
-            }
-
-            return (types[el.type] || types["text"])()
-        }
-
-        const wrapper = ( el, i, wrapper ) => ({
-            
-            default: defaultStyle( el, i ),
-            materialize: materializeStyle( el, i )
-
-        }[ wrapper ])
-            
-        const makeElemets = ( data, style ) => 
-          data.reduce(( acc, el, i ) => acc += `${ wrapper( el, i, style ) }\n`,"")
-            
-        const getTemplate = ( data, type ) => 
-          `<div class="row"><form class="col s12">\n${ makeElemets( data, type ) }</form></div>`
-
-        const makeForm = ( data = {}, template = 'default' ) => getTemplate( data, template )
-
-        const form = makeForm( data, "materialize" )
-
-        view.innerHTML = form
-
-      });
+      .then( createForm );
 
   
   </script>
