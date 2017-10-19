@@ -32,6 +32,8 @@
       cache: 'default' 
     };
 
+    const insertHTML = ( view ) => ( html ) => view.innerHTML = html
+
     const responseToJSON = ( response ) => response.json()
 
     const createForm = ( data ) => {
@@ -107,10 +109,10 @@
 
       const form = makeForm( data, "materialize" )
 
-      view.innerHTML = form
+      insertHTML( view )( form )
 
     }
-    
+
     fetch('http://localhost:8000/api/users/schema',myInit)
       .then( responseToJSON )
       .then( createForm );
