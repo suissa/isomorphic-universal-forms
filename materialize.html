@@ -80,15 +80,16 @@
 
         return ( types[ el.type ] || types[ "text" ])()
       }
+    
+    const toOption = ( map ) => ( acc, el ) => 
+      acc += `<option value="${ el[ map.value ] }">${ el[ map.name ] }</option>`
+
+    const comboPopulate = ( data, map ) => 
+      data.reduce( toOption( map ), '' )
+
 
     const createForm = ( data ) => {
       
-      const toOption = ( acc, el ) => 
-        acc += `<option value="${ el[ map.value ] }">${ el[ map.name ] }</option>`
-
-      const comboPopulate = ( data, map ) => 
-        data.reduce( toOption, '' )
-
 
       const wrapper = ( el, i, wrapper ) => ({
           
@@ -111,7 +112,7 @@
 
     }
 
-    fetch( schemaURL ,request )
+    fetch( schemaURL , request )
       .then( responseToJSON )
       .then( createForm );
 
