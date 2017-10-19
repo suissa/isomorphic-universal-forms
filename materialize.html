@@ -19,9 +19,8 @@
 
   <script>
   
-    const schemaURL = 'http://localhost:8000/api/users/schema'
+    const schemaURL = 'http://localhost:8000/api/users/schema';
     const view = document.querySelector( '[data-view]' );
-    
     const headers = new Headers();
 
     const request = { 
@@ -32,16 +31,16 @@
     };
 
     const insertHTML = ( view ) => ( html ) => view.innerHTML = html
-
     const responseToJSON = ( response ) => response.json()
+
+    const toOption = ( map ) => ( acc, el ) => 
+        acc += `<option value="${ el[ map.value ] }">${ el[ map.name ] }</option>`
 
     const createForm = ( data ) => {
       
-      const toOption = ( acc, el ) => 
-        acc += `<option value="${ el[ map.value ] }">${ el[ map.name ] }</option>`
 
       const comboPopulate = ( data, map ) => 
-        data.reduce( toOption, '' )
+        data.reduce( toOption( map ), '' )
 
       const materializeStyle = ( el, i ) => {
           
