@@ -21,13 +21,14 @@
 
   <script>
   
+    const schemaURL = 'http://localhost:8000/api/users/schema'
     const view = document.querySelector( '[data-view]' );
     
-    const myHeaders = new Headers();
+    const headers = new Headers();
 
-    const myInit = { 
+    const request = { 
       method: 'GET',
-      headers: myHeaders,
+      headers,
       mode: 'cors',
       cache: 'default' 
     };
@@ -113,7 +114,7 @@
 
     }
 
-    fetch('http://localhost:8000/api/users/schema',myInit)
+    fetch( schemaURL ,request )
       .then( responseToJSON )
       .then( createForm );
 
