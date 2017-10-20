@@ -49,9 +49,9 @@ const bootstrapStyle = ( el ) => {
         text: input,
         password: input,
         email: input,
-        textarea: textarea,
-        select: select,
-        number: number
+        textarea,
+        select,
+        number
     }
 
     return ( types[ el.type ] || types[ "text" ])()
@@ -69,9 +69,9 @@ const defaultStyle = ( el ) => {
         text: input,
         password: input,
         email: input,
-        textarea: textarea,
-        select: select,
-        number: number
+        textarea,
+        select,
+        number
     }
 
     return (types[el.type] || types["text"])()
